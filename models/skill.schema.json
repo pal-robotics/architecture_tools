@@ -1,0 +1,83 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://www.pal-robotics.com/skill.schema.json",
+    "title": "Skill",
+    "description": "A ROS 2 skill, compatible with the PAL Robotics software architecture",
+    "type": "object",
+    "properties": {
+        "id": {
+            "description": "The unique identifier for the skill. Must be a valid ROS 2 identifier.",
+            "type": "string",
+            "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$"
+        },
+        "description": {
+            "description": "A human-readable description of what the skill accomplishes",
+            "type": "string"
+        },
+        "interface": {
+            "description": "ROS 2 interface type of the skill",
+            "type": "string",
+            "enum": [
+                "action",
+                "service",
+                "topic"
+            ]
+        },
+        "default_interface_path": {
+            "description": "ROS 2 full qualified id of the interface. Must exist in the ROS system if the skill is running/available",
+            "type": "string"
+        },
+        "datatype": {
+            "description": "The ROS 2 datatype expected by the interface. Eg. std_skills/String",
+            "type": "string"
+        },
+        "parameters": {
+            "description": "The parameters requires to invoke the ROS action/service/topic",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "items": {
+                    "properties": {
+                        "name": {
+                            "description": "The name of the parameter",
+                            "type": "string"
+                        },
+                        "type": {
+                            "description": "The ROS 2 type of the parameter (eg. std_msgs/String)",
+                            "type": "string"
+                        },
+                        "description": {
+                            "description": "A human-readable description of the parameter",
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "functional_domains": {
+            "description": "Functional domains that the skill belongs to",
+            "type": "array",
+            "items": {
+                "type": "string",
+                "enum": [
+                    "perception",
+                    "planning",
+                    "control",
+                    "manipulation",
+                    "navigation",
+                    "communication",
+                    "external_bridge",
+                    "other"
+                ]
+            },
+            "minItems": 1,
+            "uniqueItems": true
+        }
+    },
+    "required": [
+        "skill",
+        "description",
+        "interface",
+        "datatype"
+    ]
+}
