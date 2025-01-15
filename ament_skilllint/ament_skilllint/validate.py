@@ -1,5 +1,19 @@
 #!/usr/bin/env python3
 
+# Copyright 2025 PAL Robotics
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import os
 import json
 from jsonschema import validate
@@ -15,11 +29,15 @@ except ImportError:
 
 def validate_manifest(path: Path, schema: dict):
 
-    print(f"\nValidating {path}...", end="")
+    report = []
+
+    print(f"Validating {path}:")
 
     if not path.exists():
         print('File not found')
-        return
+        report.append(
+            (f'{path}', [{'category': 'unknown', 'message': 'File not found'}]))
+        return report
 
     if path.suffix == '.xml':
 
@@ -36,17 +54,25 @@ def validate_manifest(path: Path, schema: dict):
             skills = [f.read()]
     else:
         print('Unsupported file type')
-        return
+        report.append(
+            (f'{path}', [{'category': 'unknown', 'message': 'Unsupported file type'}]))
+        return report
 
     # Extract the JSON content from each <skill> tag
     for skill in skills:
         try:
+            json_skill = {}
             json_skill = json.loads(skill)
             validate(json_skill, schema)
-            print('OK. ', end="")
+            print(f'\t- skill <{json_skill["id"]}>: OK')
+            report.append((f'{path}', []))
         except Exception as e:
             print(f'Error validating {path}')
+            report.append(
+                (f'{path}', [{'skill': json_skill["id"] if "id" in json_skill else "unknown", 'message': str(e)}]))
             print(e)
+
+    return report
 
 
 if __name__ == "__main__":

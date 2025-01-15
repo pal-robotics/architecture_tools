@@ -75,7 +75,7 @@
         }
     },
     "required": [
-        "skill",
+        "id",
         "description",
         "interface",
         "datatype"

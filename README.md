@@ -1,9 +1,9 @@
-Tooling around PAL skills
-=========================
+skill tools
+===========
 
-Skill validation
-----------------
+Skill manifest validation
+-------------------------
 
-The script `scripts/validate.py` can be used to validate the skill manifests.
-It uses the `jsonschema` library to validate the manifests against the schema
-in `schemas/skill.schema.json`.
+You can automatically check your skill manifest using `ament_lint`.
+
+See [ament_skilllint documentation](ament_skilllint/README.md) for more information.

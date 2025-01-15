@@ -1,0 +1,22 @@
+{
+    "skill": "guide_to_meeting_room",
+    "description": "This skill allows the robot to guide a person to a specified meeting room.",
+    "interface": "action",
+    "datatype": "my_robot_msgs/GuideToRoom",
+    "parameters": [
+        {
+            "name": "room_id",
+            "type": "std_msgs/String",
+            "description": "The identifier of the meeting room to guide the person to"
+        },
+        {
+            "name": "person_id",
+            "type": "std_msgs/String",
+            "description": "The identifier of the person to be guided"
+        }
+    ],
+    "functional_domains": [
+        "navigation",
+        "communication"
+    ]
+}
