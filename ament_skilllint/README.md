@@ -43,7 +43,10 @@ Usage
 
 ### Python
 
-To use the linter, add the following to your `setup.py`:
+To use the linter in a Python project, add
+`<test_depend>ament_skilllint</test_depend>` to your `package.xml`.
+
+Then, add the following to your `setup.py` (if not already present):
 
 ```python
 setup(
@@ -53,7 +56,7 @@ setup(
     )
 ```
 
-And add a file `test/test_skilllint.py` with the following content:
+And finally create a file `test/test_skilllint.py` with the following content:
 
 ```python
 from ament_skilllint.main import main
@@ -68,7 +71,8 @@ def test_skilllint():
 
 ### CMake
 
-To use the linter, you simply need to depend on `ament_cmake_skilllint` in your `package.xml`:
+To use the linter, you simply need to depend on `ament_cmake_skilllint` in your
+`package.xml`:
 
 ```xml
 <test_depend>ament_cmake_skilllint</test_depend>
