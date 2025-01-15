@@ -9,10 +9,15 @@
 
   <license>Apache License 2.0</license>
 
+  <depend>python3-jsonschema</depend>
+
   <exec_depend>ament_lint</exec_depend>
 
-  <test_depend>ament_flake8</test_depend>
   <test_depend>python3-pytest</test_depend>
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>ament_xmllint</test_depend>
 
   <export>
     <build_type>ament_python</build_type>

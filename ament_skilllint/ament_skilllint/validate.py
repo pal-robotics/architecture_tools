@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
 import json
 from jsonschema import validate
 import xml.etree.ElementTree as ET
@@ -24,7 +23,8 @@ from pathlib import Path
 try:
     import ament_index_python.packages
 except ImportError:
-    print("ament_index_python not found. ROS 2 packages will not be validated. You can still validate JSON files.")
+    print("ament_index_python not found. ROS 2 packages will not be validated."
+          " You can still validate JSON files.")
 
 
 def validate_manifest(path: Path, schema: dict):
@@ -42,8 +42,14 @@ def validate_manifest(path: Path, schema: dict):
     if path.suffix == '.xml':
 
         # Parse the XML
-        tree = ET.parse(path)
-        root = tree.getroot()
+        try:
+            tree = ET.parse(path)
+            root = tree.getroot()
+        except ET.ParseError as e:
+            print('Error parsing XML file')
+            report.append(
+                (f'{path}', [{'category': 'unknown', 'message': f'Error parsing XML file: {e}'}]))
+            return report
 
         # Find all <skill> tags inside <export> tags
         skill_tags = root.findall(".//export/skill")
@@ -58,6 +64,11 @@ def validate_manifest(path: Path, schema: dict):
             (f'{path}', [{'category': 'unknown', 'message': 'Unsupported file type'}]))
         return report
 
+    if not skills:
+        print('No skills found')
+        report.append((f'{path}', []))
+        return report
+
     # Extract the JSON content from each <skill> tag
     for skill in skills:
         try:
@@ -69,7 +80,9 @@ def validate_manifest(path: Path, schema: dict):
         except Exception as e:
             print(f'Error validating {path}')
             report.append(
-                (f'{path}', [{'skill': json_skill["id"] if "id" in json_skill else "unknown", 'message': str(e)}]))
+                (f'{path}', [
+                    {'skill': json_skill["id"] if "id" in json_skill else "unknown",
+                     'message': str(e)}]))
             print(e)
 
     return report
