@@ -54,15 +54,27 @@
                 }
             }
         },
+        "required_pal_storables": {
+            "description": "List of PAL storable types required by the skill",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "resources_ownership": {
+            "description": "The resources that the skill owns, if any",
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
         "functional_domains": {
             "description": "Functional domains that the skill belongs to",
             "type": "array",
             "items": {
                 "type": "string",
                 "enum": [
-                    "perception",
-                    "planning",
-                    "control",
+                    "management",
                     "manipulation",
                     "navigation",
                     "communication",
