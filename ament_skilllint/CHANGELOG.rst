@@ -2,8 +2,8 @@
 Changelog for package ament_skilllint
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.3.0 (2025-02-13)
+------------------
 * update manifest to cover visual programming needs
 * Contributors: Séverin Lemaignan
 
