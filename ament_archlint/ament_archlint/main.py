@@ -26,12 +26,12 @@ import json
 
 import ament_index_python.packages
 
-from ament_skilllint.validate import validate_manifest
+from ament_archlint.validate import validate_manifest
 
 
 def main(argv=sys.argv[1:]):
     parser = argparse.ArgumentParser(
-        description='Check ROS skills have conformant skill manifests.',
+        description='Check ROS packages have conformant PAL software component manifests.',
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument(
         'path',
@@ -50,8 +50,8 @@ def main(argv=sys.argv[1:]):
 
     # get path to skill manifest schema
     pkg_path = ament_index_python.packages.get_package_share_directory(
-        "ament_skilllint")
-    schema_path = Path(pkg_path) / "schema" / "skill.schema.json"
+        "architecture_schemas")
+    schema_path = Path(pkg_path) / "skill.schema.json"
     with open(schema_path) as f:
         schema = json.load(f)
 

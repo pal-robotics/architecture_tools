@@ -16,39 +16,39 @@
 #
 # Add a test to check manifests of ROS skills.
 #
-# :param TESTNAME: the name of the test, default: "skilllint"
+# :param TESTNAME: the name of the test, default: "archlint"
 # :type TESTNAME: string
 # :param ARGN: the files or directories to check
 # :type ARGN: list of strings
 #
 # @public
 #
-function(ament_skilllint)
+function(ament_archlint)
   cmake_parse_arguments(ARG "" "TESTNAME" "" ${ARGN})
   if(NOT ARG_TESTNAME)
-    set(ARG_TESTNAME "skilllint")
+    set(ARG_TESTNAME "archlint")
   endif()
 
-  find_program(ament_skilllint_BIN NAMES "ament_skilllint")
-  if(NOT ament_skilllint_BIN)
-    message(FATAL_ERROR "ament_skilllint() could not find program 'ament_skilllint'")
+  find_program(ament_archlint_BIN NAMES "ament_archlint")
+  if(NOT ament_archlint_BIN)
+    message(FATAL_ERROR "ament_archlint() could not find program 'ament_archlint'")
   endif()
 
   set(result_file "${AMENT_TEST_RESULTS_DIR}/${PROJECT_NAME}/${ARG_TESTNAME}.xunit.xml")
-  set(cmd "${ament_skilllint_BIN}" "--xunit-file" "${result_file}" ".")
+  set(cmd "${ament_archlint_BIN}" "--xunit-file" "${result_file}" ".")
   list(APPEND cmd ${ARG_UNPARSED_ARGUMENTS})
 
-  file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/ament_skilllint")
+  file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/ament_archlint")
   ament_add_test(
     "${ARG_TESTNAME}"
     COMMAND ${cmd}
-    OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_skilllint/${ARG_TESTNAME}.txt"
+    OUTPUT_FILE "${CMAKE_BINARY_DIR}/ament_archlint/${ARG_TESTNAME}.txt"
     RESULT_FILE "${result_file}"
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
   )
   set_tests_properties(
     "${ARG_TESTNAME}"
     PROPERTIES
-    LABELS "skilllint;linter"
+    LABELS "archlint;linter"
   )
 endfunction()

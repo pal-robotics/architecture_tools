@@ -1,4 +1,5 @@
-# Copyright 2025 PAL Robotics
+# Copyright 2025 PAL Robotics S.L.
+# Copyright 2015 Open Source Robotics Foundation, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,8 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-def pytest_configure(config):
-    config.addinivalue_line(
-        'markers',
-        'skilllint: marks tests checking manifests of skills being conformant')
+file(GLOB_RECURSE _source_files FOLLOW_SYMLINKS "package.xml")
+if(_source_files)
+  message(STATUS "Added test 'archlint' to check PAL module manifests")
+  ament_archlint()
+endif()

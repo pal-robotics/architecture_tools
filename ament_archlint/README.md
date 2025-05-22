@@ -1,4 +1,4 @@
-ament_skilllint
+ament_archlint
 ===============
 
 The package provides a linter for ROS 2 packages that expose skills.
@@ -15,7 +15,7 @@ Example of conformant skill manifest:
   <!-- ...regular package.xml content -->
 
   <!-- add this dependency to check the skill manifest -->
-  <test_depend>ament_skilllint</test_depend>
+  <test_depend>ament_archlint</test_depend>
 
   <export>
       <build_type>ament_python</build_type>
@@ -36,7 +36,9 @@ Example of conformant skill manifest:
 </package>
 ```
 
-The schema for the skill manifest is defined in `schema/skill.schema.json`.
+The schema for the skill manifest is defined in the
+[architecture_schemas](https://gitlab.pal-robotics.com/interaction/architecture_schemas)
+repository.
 
 Usage
 -----
@@ -44,7 +46,7 @@ Usage
 ### Python
 
 To use the linter in a Python project, add
-`<test_depend>ament_skilllint</test_depend>` to your `package.xml`.
+`<test_depend>ament_archlint</test_depend>` to your `package.xml`.
 
 Then, add the following to your `setup.py` (if not already present):
 
@@ -56,26 +58,26 @@ setup(
     )
 ```
 
-And finally create a file `test/test_skilllint.py` with the following content:
+And finally create a file `test/test_archlint.py` with the following content:
 
 ```python
-from ament_skilllint.main import main
+from ament_archlint.main import main
 import pytest
 
 @pytest.mark.linter
-@pytest.mark.skilllint
-def test_skilllint():
+@pytest.mark.archlint
+def test_archlint():
     rc = main(argv=['.'])
     assert rc == 0, 'Found error in skill manifest'
 ```
 
 ### CMake
 
-To use the linter, you simply need to depend on `ament_cmake_skilllint` in your
+To use the linter, you simply need to depend on `ament_cmake_archlint` in your
 `package.xml`:
 
 ```xml
-<test_depend>ament_cmake_skilllint</test_depend>
+<test_depend>ament_cmake_archlint</test_depend>
 ```
 
 Then, make sure the linters are called in your `CMakeLists.txt`.

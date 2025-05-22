@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="2">
-  <name>ament_cmake_skilllint</name>
+  <name>ament_cmake_archlint</name>
   <version>0.3.1</version>
   <description>
-    The CMake API for ament_skilllint to check ROS skill manifests.
+    The CMake API for ament_archlint to check PAL software components manifests.
   </description>
 
   <maintainer email="severin.lemaignan@pal-robotics.com">Séverin Lemaignan</maintainer>
@@ -16,7 +16,7 @@
   <buildtool_depend>ament_cmake_test</buildtool_depend>
 
   <buildtool_export_depend>ament_cmake_test</buildtool_export_depend>
-  <buildtool_export_depend>ament_skilllint</buildtool_export_depend>
+  <buildtool_export_depend>ament_archlint</buildtool_export_depend>
 
   <test_depend>ament_cmake_copyright</test_depend>
   <test_depend>ament_cmake_lint_cmake</test_depend>

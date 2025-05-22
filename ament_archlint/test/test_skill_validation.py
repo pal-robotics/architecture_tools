@@ -18,13 +18,13 @@ from pathlib import Path
 import tempfile
 import json
 
-from ament_skilllint.validate import validate_manifest
+from ament_archlint.validate import validate_manifest
 
 import ament_index_python.packages
 # get path to skill manifest schema
 pkg_path = ament_index_python.packages.get_package_share_directory(
-    "ament_skilllint")
-schema_path = Path(pkg_path) / "schema" / "skill.schema.json"
+    "architecture_schemas")
+schema_path = Path(pkg_path) / "skill.schema.json"
 with open(schema_path) as f:
     schema = json.load(f)
 

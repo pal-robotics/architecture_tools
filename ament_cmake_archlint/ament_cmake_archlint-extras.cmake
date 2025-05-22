@@ -15,7 +15,7 @@
 
 find_package(ament_cmake_test QUIET REQUIRED)
 
-include("${ament_cmake_skilllint_DIR}/ament_skilllint.cmake")
+include("${ament_cmake_archlint_DIR}/ament_archlint.cmake")
 
-ament_register_extension("ament_lint_auto" "ament_cmake_skilllint"
-  "ament_cmake_skilllint_lint_hook.cmake")
+ament_register_extension("ament_lint_auto" "ament_cmake_archlint"
+  "ament_cmake_archlint_lint_hook.cmake")

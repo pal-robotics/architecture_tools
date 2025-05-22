@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(ament_cmake_skilllint NONE)
+project(ament_cmake_archlint NONE)
 
 find_package(ament_cmake_core REQUIRED)
 find_package(ament_cmake_test REQUIRED)
 
 ament_package(
-  CONFIG_EXTRAS "ament_cmake_skilllint-extras.cmake"
+  CONFIG_EXTRAS "ament_cmake_archlint-extras.cmake"
 )
 
 install(

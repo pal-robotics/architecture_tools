@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="3">
-  <name>ament_skilllint</name>
+  <name>ament_archlint</name>
   <version>0.3.1</version>
   <description>Tools to validate ROS skills manifests</description>
 
@@ -9,6 +9,7 @@
 
   <license>Apache License 2.0</license>
 
+  <depend>architecture_schemas</depend>
   <depend>python3-jsonschema</depend>
 
   <exec_depend>ament_lint</exec_depend>

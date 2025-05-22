@@ -1,5 +1,5 @@
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Changelog for package ament_cmake_skilllint
+Changelog for package ament_cmake_archlint
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 0.3.1 (2025-06-18)
@@ -10,5 +10,5 @@ Changelog for package ament_cmake_skilllint
 
 0.2.0 (2025-01-15)
 ------------------
-* create ament_skilllint and ament_cmake_skilllint to integrate skill manifest checking to ament test
+* create ament_archlint and ament_cmake_archlint to integrate skill manifest checking to ament test
 * Contributors: Séverin Lemaignan
