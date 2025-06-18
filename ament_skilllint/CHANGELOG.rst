@@ -2,8 +2,8 @@
 Changelog for package ament_skilllint
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.3.1 (2025-06-18)
+------------------
 * skillint python: look recursively for package.xml files
 * Contributors: Séverin Lemaignan
 
