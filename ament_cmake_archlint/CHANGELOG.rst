@@ -2,6 +2,11 @@
 Changelog for package ament_cmake_archlint
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* {skilllint -> archlint}
+* Contributors: Séverin Lemaignan
+
 0.3.1 (2025-06-18)
 ------------------
 
