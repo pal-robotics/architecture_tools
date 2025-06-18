@@ -55,9 +55,13 @@ def main(argv=sys.argv[1:]):
     with open(schema_path) as f:
         schema = json.load(f)
 
-    report = validate_manifest(
-        Path(args.path) / "package.xml", schema)
-    error_count = sum(len(r[1]) for r in report)
+    error_count = 0
+    # find all package.xml files under the given path using os.walk
+    for root, _, files in os.walk(args.path):
+        if 'package.xml' in files:
+            report = validate_manifest(
+                Path(root) / "package.xml", schema)
+            error_count += sum(len(r[1]) for r in report)
 
     # print summary
     if not error_count:
