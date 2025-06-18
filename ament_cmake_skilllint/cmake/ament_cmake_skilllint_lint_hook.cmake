@@ -15,6 +15,6 @@
 
 file(GLOB_RECURSE _source_files FOLLOW_SYMLINKS "package.xml")
 if(_source_files)
-  message(STATUS "Added test 'skilllint' to check XML markup files")
+  message(STATUS "Added test 'skilllint' to check PAL module manifests")
   ament_skilllint()
 endif()
