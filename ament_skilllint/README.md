@@ -78,5 +78,28 @@ To use the linter, you simply need to depend on `ament_cmake_skilllint` in your
 <test_depend>ament_cmake_skilllint</test_depend>
 ```
 
-If you you `ament_lint_auto` in your `CMakeLists.txt`, the linter will be run automatically.
+Then, make sure the linters are called in your `CMakeLists.txt`.
 
+Here an example of a complete `CMakeLists.txt` using `ament_cmake_auto`:
+
+```cmake
+cmake_minimum_required(VERSION 3.8)
+project(your_project)
+
+find_package(ament_cmake_auto REQUIRED)
+ament_auto_find_build_dependencies()
+
+rosidl_generate_interfaces(${PROJECT_NAME}
+  "action/MyAction.action"
+  DEPENDENCIES builtin_interfaces
+)
+
+ament_export_dependencies(rosidl_default_runtime)
+
+if(BUILD_TESTING)
+    ament_auto_find_test_dependencies()
+    ament_lint_auto_find_test_dependencies()
+endif()
+
+ament_auto_package()
+```
