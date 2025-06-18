@@ -2,6 +2,9 @@
 Changelog for package ament_cmake_skilllint
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 0.3.0 (2025-02-13)
 ------------------
 
