@@ -14,6 +14,7 @@ The repository is closely related to:
 Component manifest validation
 -------------------------
 
-You can automatically check your skill manifest using `ament_lint`.
+You can automatically check your skill manifest using `ament_archlint`.
 
-See [ament_skilllint documentation](ament_skilllint/README.md) for more information.
+See [ament_archlint documentation](ament_archlint/README.md) for more
+information (including integration in Python and CMake-based ROS 2 packages).
