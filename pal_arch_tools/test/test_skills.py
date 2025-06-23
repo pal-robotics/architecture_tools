@@ -18,8 +18,9 @@ from pathlib import Path
 import tempfile
 import os
 import json
+import pytest
 
-from pal_arch_tools import get_skills
+from pal_arch_tools import get_skills, get_tasks, get_missions
 
 
 def create_manifest(temp_dir, content):
@@ -44,14 +45,29 @@ def create_manifest(temp_dir, content):
         key, values = list(component.items())[0]
         f.write(f'<{key}>\n')
         f.write(json.dumps(values))
-        f.write(f'</{key}>\n')
+        f.write(f'\n</{key}>\n')
 
     f.write(
         '</export>\n</package>')
     f.close()
 
+    # add the path of the temporary file to AMENT_PREFIX_PATH
+    os.environ['AMENT_PREFIX_PATH'] = str(temp_dir)
 
-def test_skills():
+
+@pytest.fixture(autouse=True)
+def protect_ament_prefix():
+    # save the previous AMENT_PREFIX_PATH
+    previous_ament_prefix_path = os.environ.get('AMENT_PREFIX_PATH', '')
+
+    # the test function will be run at this point
+    yield
+
+    # restore the previous AMENT_PREFIX_PATH
+    os.environ['AMENT_PREFIX_PATH'] = previous_ament_prefix_path
+
+
+def test_single_skill():
 
     # write a well-formed XML file with a <skill> tag and valid JSON content
     with tempfile.TemporaryDirectory() as temp_dir:
@@ -63,12 +79,6 @@ def test_skills():
                            "datatype": "data1",
                            "interface": "action"}}]
                         )
-
-        # save the previous AMENT_PREFIX_PATH
-        previous_ament_prefix_path = os.environ.get('AMENT_PREFIX_PATH', '')
-
-        # add the path of the temporary file to AMENT_PREFIX_PATH
-        os.environ['AMENT_PREFIX_PATH'] = str(temp_dir)
 
         skills = get_skills()
 
@@ -85,10 +95,95 @@ def test_skills():
         assert skill.datatype == 'data1'
         assert skill.interface == 'action'
 
-        # restore the previous AMENT_PREFIX_PATH
-        os.environ['AMENT_PREFIX_PATH'] = previous_ament_prefix_path
+
+def test_multi_skills():
+
+    # write a well-formed XML file with a <skill> tag and valid JSON content
+    # with tempfile.TemporaryDirectory() as temp_dir:
+    temp_dir = "/tmp/test_skills"
+    create_manifest(temp_dir,
+                    [{"skill":
+                        {"id": "skill1",
+                         "description": "nice desc",
+                         "datatype": "data1",
+                         "interface": "action"}
+                      },
+                     {"skill":
+                        {"id": "skill2",
+                         "description": "nice desc",
+                         "datatype": "data2",
+                         "interface": "topic"}
+                      }]
+                    )
+
+    skills = get_skills()
+
+    print(f"Skills found: {skills}")
+    assert len(skills) == 2
+
+    assert {skills[0].id, skills[1].id} == {'skill1', 'skill2'}
+    assert {skills[0].datatype, skills[1].datatype} == {'data1', 'data2'}
+    assert {skills[0].interface, skills[1].interface} == {'topic', 'action'}
+
+
+def test_multi_components():
+
+    # write a well-formed XML file with a <skill> tag and valid JSON content
+    # with tempfile.TemporaryDirectory() as temp_dir:
+    temp_dir = "/tmp/test_skills"
+    create_manifest(temp_dir,
+                    [{"skill":
+                        {"id": "skill1",
+                         "description": "nice desc",
+                         "datatype": "data1",
+                         "interface": "action"}
+                      },
+                     {"skill":
+                        {"id": "skill2",
+                         "description": "nice desc",
+                         "datatype": "data2",
+                         "interface": "topic"}
+                      },
+                     {"mission":
+                        {"id": "mission1",
+                         "description": "nice desc",
+                         "datatype": "data2",
+                         "interface": "action"}
+                      },
+                     {"task":
+                        {"id": "task1",
+                         "description": "nice desc",
+                         "datatype": "data2",
+                         "interface": "action"}
+                      }]
+                    )
+
+    skills = get_skills()
+
+    print(f"Skills found: {skills}")
+    assert len(skills) == 2
+
+    assert {skills[0].id, skills[1].id} == {'skill1', 'skill2'}
+    assert {skills[0].datatype, skills[1].datatype} == {'data1', 'data2'}
+    assert {skills[0].interface, skills[1].interface} == {'topic', 'action'}
+
+    tasks = get_tasks()
+    print(f"Tasks found: {tasks}")
+    assert len(tasks) == 1
+    assert tasks[0].id == 'task1'
+    assert tasks[0].datatype == 'data2'
+    assert tasks[0].interface == 'action'
+
+    missions = get_missions()
+    print(f"Missions found: {missions}")
+    assert len(missions) == 1
+    assert missions[0].id == 'mission1'
+    assert missions[0].datatype == 'data2'
+    assert missions[0].interface == 'action'
 
 
 if __name__ == '__main__':
-    test_skills()
+    test_single_skill()
+    test_multi_skills()
+    test_multi_components()
     print('All tests passed')

@@ -13,4 +13,4 @@
 # limitations under the License.
 
 # flake8: noqa
-from .arch_list import get_manifest, get_skills, get_tasks, get_missions, get_components_list
+from .arch_list import get_skills, get_tasks, get_missions, get_components

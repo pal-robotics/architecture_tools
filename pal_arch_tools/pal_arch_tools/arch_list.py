@@ -35,13 +35,15 @@ Component = namedtuple(
                   'interface'])
 
 
-def get_manifest(pkg_name):
+def get_manifests(pkg_name):
     """
     Return the manifest of a package, if it exports a skill, task or mission.
 
     :param pkg_name: the name of the package
-    :returns: a tuple (type of component, manifest dictionary)
+    :returns: a list of tuples (type of component, manifest dictionary)
     """
+    manifests = []
+
     path = aip.get_package_share_path(pkg_name)
 
     package_xml = path / 'package.xml'
@@ -53,8 +55,8 @@ def get_manifest(pkg_name):
     export = root.find('export')
     if export is not None:
         for type in ["skill", "task", "mission", "app"]:
-            res = export.find(type)
-            if res is not None:
+            components = export.findall(type)
+            for res in components:
                 content_type = res.attrib.get('content-type', 'json')
                 content = res.text
                 if not content.strip():
@@ -64,18 +66,19 @@ def get_manifest(pkg_name):
                 if content_type == 'json':
                     try:
                         manifest = json.loads(content)
-                        return type, manifest
+                        manifests.append((type, manifest))
                     except json.decoder.JSONDecodeError as jde:
                         print(f"Error while reading the manifest of {type} {pkg_name} "
                               f"(from {package_xml}): {jde}. Skipping.")
                         continue
                 elif content_type == 'yaml':
                     manifest = yaml.safe_load(content)
-                    return type, manifest
-    return None, None
+                    manifests.append((type, manifest))
+
+    return manifests
 
 
-def get_components_list(type: ComponentType | None = None):
+def get_components(type: ComponentType | None = None):
     """
     Return the list of mission/tasks/skills installed in the system.
 
@@ -91,39 +94,39 @@ def get_components_list(type: ComponentType | None = None):
     """
     components = []
     for pkg, _ in aip.get_resources("packages").items():
-        c_type, manifest = get_manifest(pkg)
-        if manifest and (type is None or c_type == type.value):
-            if "id" not in manifest:
-                print(
-                    f"Error: missing 'id' in manifest of {c_type} in {pkg}. Skipping.")
-                continue
+        for c_type, manifest in get_manifests(pkg):
+            if manifest and (type is None or c_type == type.value):
+                if "id" not in manifest:
+                    print(
+                        f"Error: missing 'id' in manifest of {c_type} in {pkg}. Skipping.")
+                    continue
 
-            manifest["from_package"] = pkg
-            manifest["component_type"] = c_type
-            components.append(Component(**manifest))
+                manifest["from_package"] = pkg
+                manifest["component_type"] = c_type
+                components.append(Component(**manifest))
 
     return components
 
 
 def get_skills():
     """Return the list of skills installed in the system."""
-    return get_components_list(ComponentType.SKILL)
+    return get_components(ComponentType.SKILL)
 
 
 def get_tasks():
     """Return the list of tasks installed in the system."""
-    return get_components_list(ComponentType.TASK)
+    return get_components(ComponentType.TASK)
 
 
 def get_missions():
     """Return the list of missions installed in the system."""
-    return get_components_list(ComponentType.MISSION)
+    return get_components(ComponentType.MISSION)
 
 
 if __name__ == "__main__":
 
     print("Components installed in the system:")
-    for id, component in get_components_list().items():
+    for id, component in get_components().items():
         pkg, c_type, manifest = component
         print(
             f"- {c_type} <{id}> ({manifest['interface']}: "
