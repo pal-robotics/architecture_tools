@@ -17,12 +17,22 @@ import xml.etree.ElementTree as ET
 import json
 import yaml
 from enum import Enum
+from collections import namedtuple
 
 
 class ComponentType(Enum):
     SKILL = "skill"
     TASK = "task"
     MISSION = "mission"
+
+
+Component = namedtuple(
+    'Component', ['from_package',
+                  'component_type',
+                  'id',
+                  'description',
+                  'datatype',
+                  'interface'])
 
 
 def get_manifest(pkg_name):
@@ -79,8 +89,7 @@ def get_components_list(type: ComponentType | None = None):
 
     :param type: the type of component to look for. If None, return all components.
     """
-
-    components = {}
+    components = []
     for pkg, _ in aip.get_resources("packages").items():
         c_type, manifest = get_manifest(pkg)
         if manifest and (type is None or c_type == type.value):
@@ -89,9 +98,26 @@ def get_components_list(type: ComponentType | None = None):
                     f"Error: missing 'id' in manifest of {c_type} in {pkg}. Skipping.")
                 continue
 
-            components[manifest["id"]] = (pkg, c_type, manifest)
+            manifest["from_package"] = pkg
+            manifest["component_type"] = c_type
+            components.append(Component(**manifest))
 
     return components
+
+
+def get_skills():
+    """Return the list of skills installed in the system."""
+    return get_components_list(ComponentType.SKILL)
+
+
+def get_tasks():
+    """Return the list of tasks installed in the system."""
+    return get_components_list(ComponentType.TASK)
+
+
+def get_missions():
+    """Return the list of missions installed in the system."""
+    return get_components_list(ComponentType.MISSION)
 
 
 if __name__ == "__main__":
@@ -100,4 +126,5 @@ if __name__ == "__main__":
     for id, component in get_components_list().items():
         pkg, c_type, manifest = component
         print(
-            f"- {c_type} <{id}> ({manifest['interface']}: {manifest['default_interface_path']}), implemented by package {pkg}")
+            f"- {c_type} <{id}> ({manifest['interface']}: "
+            f"{manifest['default_interface_path']}), implemented by package {pkg}")
