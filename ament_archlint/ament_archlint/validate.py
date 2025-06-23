@@ -15,6 +15,7 @@
 # limitations under the License.
 
 import json
+import yaml
 from jsonschema import validate
 import xml.etree.ElementTree as ET
 import argparse
@@ -53,11 +54,19 @@ def validate_manifest(path: Path, schema: dict):
 
         # Find all <skill> tags inside <export> tags
         skill_tags = root.findall(".//export/skill")
-        skills = [s.text.strip() for s in skill_tags]
+
+        skills = []
+        for skill_tag in skill_tags:
+            content_type = skill_tag.attrib.get('content-type', 'json')
+            text = skill_tag.text if skill_tag.text else ''
+            if content_type == 'json':
+                skills.append(json.loads(text))
+            elif content_type == 'yaml':
+                skills.append(yaml.safe_load(text))
 
     elif path.suffix == '.json':
         with open(path) as f:
-            skills = [f.read()]
+            skills = json.loads(f.read())
     else:
         print('Unsupported file type')
         report.append(
@@ -72,16 +81,16 @@ def validate_manifest(path: Path, schema: dict):
     # Extract the JSON content from each <skill> tag
     for skill in skills:
         try:
-            json_skill = {}
-            json_skill = json.loads(skill)
-            validate(json_skill, schema)
-            print(f'\t- skill <{json_skill["id"]}>: OK')
+            print(f'\n\n\t- validating skill <{skill["id"]}>')
+            print(skill)
+            validate(skill, schema)
+            print(f'\t- skill <{skill["id"]}>: OK')
             report.append((f'{path}', []))
         except Exception as e:
             print(f'Error validating {path}')
             report.append(
                 (f'{path}', [
-                    {'skill': json_skill["id"] if "id" in json_skill else "unknown",
+                    {'skill': skill["id"] if "id" in skill else "unknown",
                      'message': str(e)}]))
             print(e)
 
