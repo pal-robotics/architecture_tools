@@ -17,7 +17,7 @@ import xml.etree.ElementTree as ET
 import json
 import yaml
 from enum import Enum
-from collections import namedtuple
+from collections import UserDict
 
 
 class ComponentType(Enum):
@@ -25,14 +25,21 @@ class ComponentType(Enum):
     TASK = "task"
     MISSION = "mission"
 
+# subclaqss UserDict to create a 'dot notation' dictionary
 
-Component = namedtuple(
-    'Component', ['from_package',
-                  'component_type',
-                  'id',
-                  'description',
-                  'datatype',
-                  'interface'])
+
+class Component(UserDict):
+    """
+    A class to represent a component (skill, task, mission) with its manifest.
+
+    Inherits from UserDict to allow dot notation access to the dictionary keys.
+    """
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def __getattr__(self, item):
+        return self.__getitem__(item)
 
 
 def get_manifests(pkg_name):
