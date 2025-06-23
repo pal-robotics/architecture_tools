@@ -2,8 +2,8 @@
 Changelog for package pal_arch_tools
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.1.0 (2025-06-23)
+------------------
 * align packages versions
 * support multiple skills,tasks,missions per manifest; extended accordingly tests
 * rename to pal_arch_tool, installable as pkg, add tests, polish API
