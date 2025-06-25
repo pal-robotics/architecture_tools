@@ -2,6 +2,12 @@
 Changelog for package ament_archlint
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* fix reporting of malformed JSON/YAML
+* support validating manifests in YAML
+* Contributors: Séverin Lemaignan
+
 1.1.0 (2025-06-23)
 ------------------
 

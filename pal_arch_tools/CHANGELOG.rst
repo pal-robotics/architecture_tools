@@ -2,6 +2,11 @@
 Changelog for package pal_arch_tools
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* QoL change to the component objects returned by pal_arch_tools.get\_*
+* Contributors: Séverin Lemaignan
+
 1.1.0 (2025-06-23)
 ------------------
 * align packages versions
