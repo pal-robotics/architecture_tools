@@ -83,6 +83,52 @@ def test_invalid_file():
 
 def test_invalid_manifest():
 
+    # invalid content-type
+    with tempfile.NamedTemporaryFile(mode='w', suffix=".xml", delete=False) as f:
+        f.write(
+            '<package format="2">\n  '
+            '<export>\n    '
+            '<skill content-type="klingon">{"ide: "skill1"}</skill>\n  '
+            '</export>\n</package>')
+        f.close()
+        report = validate_manifest(Path(f.name), schema)
+        assert len(report[0][1]) != 0
+
+    # invalid JSON
+    with tempfile.NamedTemporaryFile(mode='w', suffix=".xml", delete=False) as f:
+        f.write(
+            '<package format="2">\n  '
+            '<export>\n    '
+            '<skill>{"ide: "skill1"}</skill>\n  '
+            '</export>\n</package>')
+        f.close()
+        report = validate_manifest(Path(f.name), schema)
+        assert len(report[0][1]) != 0
+
+    # invalid JSON 2
+    with tempfile.NamedTemporaryFile(mode='w', suffix=".xml", delete=False) as f:
+        f.write(
+            '<package format="2">\n  '
+            '<export>\n    '
+            '<skill content-type="json">{"ide: "skill1"}</skill>\n  '
+            '</export>\n</package>')
+        f.close()
+        report = validate_manifest(Path(f.name), schema)
+        assert len(report[0][1]) != 0
+
+    # invalid YAML
+    with tempfile.NamedTemporaryFile(mode='w', suffix=".xml", delete=False) as f:
+        f.write(
+            '<package format="2">\n  '
+            '<export>\n    '
+            '<skill content-type="yaml">\n'
+            '  ide: skill1"\n'
+            '</skill>\n  '
+            '</export>\n</package>')
+        f.close()
+        report = validate_manifest(Path(f.name), schema)
+        assert len(report[0][1]) != 0
+
     # missing id
     with tempfile.NamedTemporaryFile(mode='w', suffix=".xml", delete=False) as f:
         f.write(

@@ -59,10 +59,24 @@ def validate_manifest(path: Path, schema: dict):
         for skill_tag in skill_tags:
             content_type = skill_tag.attrib.get('content-type', 'json')
             text = skill_tag.text if skill_tag.text else ''
-            if content_type == 'json':
-                skills.append(json.loads(text))
-            elif content_type == 'yaml':
-                skills.append(yaml.safe_load(text))
+            try:
+                if content_type == 'json':
+                    skills.append(json.loads(text))
+                elif content_type == 'yaml':
+                    skills.append(yaml.safe_load(text))
+                else:
+                    raise ValueError(
+                        f'Unsupported content type: {content_type}')
+            except Exception as e:
+                print(f'Error validating {path}. Malformed {content_type} in '
+                      '<skill> tag')
+                report.append(
+                    (f'{path}', [
+                        {'skill': skill_tag.attrib.get('id', 'unknown'),
+                         'message': str(e)}]))
+                print(e)
+        if report:
+            return report
 
     elif path.suffix == '.json':
         with open(path) as f:
@@ -81,8 +95,6 @@ def validate_manifest(path: Path, schema: dict):
     # Extract the JSON content from each <skill> tag
     for skill in skills:
         try:
-            print(f'\n\n\t- validating skill <{skill["id"]}>')
-            print(skill)
             validate(skill, schema)
             print(f'\t- skill <{skill["id"]}>: OK')
             report.append((f'{path}', []))
